@@ -8,25 +8,23 @@ const {
 const uuid = require('../utils/uuid');
 
 
-router.get('/api/notes', (req, res) => {
-    res.json(`${req.method} request received`);
-    return res.json(notes);
-})
-
-
 // post requests
 router.post('/api/notes', (req, res) => {
-    let response;
 
-    if (req.body && req.body.title && req.body.text) {
-        response = {
-            status: 'success',
-            data: req.body
+    const {
+        title,
+        text
+    } = req.body;
+
+    if (req.body) {
+        const newNote = {
+            title,
+            text,
+            note_id: uuid()
         };
-        res.json(`${req.method} request received to add new notes`);
+        readAndAppend(newNote, './db/db.json');
+        res.json('added new note!');
     } else {
-        res.json('Request body must have a title and a text.')
+        res.error('error in adding the note');
     }
-
-    console.info(req.body);
 })
