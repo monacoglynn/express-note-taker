@@ -47,14 +47,12 @@ router.post('/api/notes', (req, res) => {
 router.delete(`/api/notes/:id`, (req, res) => {
     const noteId = req.params.id;
     readFromFile('./db/db.json')
-        .then((data) => JSON.parse(data))
-        .then((json) => {
-            const result = json.filter((note) => note.id !== noteId);
-
+        .then((data) => {
+            const dbData = JSON.parse(data);
+            const result = dbData.filter((note) => note.id !== noteId);
             writeToFile('./db/db.json', result);
-
             res.json(`Item ${noteId} has been deleted`);
-        });
+        })
 });
 
 
